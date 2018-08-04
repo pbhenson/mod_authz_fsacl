@@ -1,0 +1,85 @@
+Introduction
+------------
+
+mod_authz_fsacl is an Apache module that allows you to perform
+authorization based on the underlying filesystem ACL. In a scenario where
+you are providing access to files via file sharing protocols such as NFS or
+CIFS, and providing access to the same files via HTTP, you can control
+authorization in one place. You can also easily mix files that require
+authentication with files that do not; any world readable file will be
+delivered without authentication requested, while any file that restricts
+access will only be provided to an authenticated user that is authorized by
+the ACL.
+
+Currently mod_authz_fsacl only supports ZFS ACLs under Solaris, but could
+easily be extended to other types of ACLs or other operating systems.
+
+
+Installation/Configuration
+--------------------------
+
+To compile the module, change your current working directory to the
+unpacked module directory, and run:
+
+	$ apxs -c mod_authz_fsacl.c -lsec
+
+
+This will create the shared object binary in the .libs directory, which you
+then need to copy to the appropriate location for your installation:
+
+	$ cp .libs/mod_authz_fsacl.so /path/to/apache/modules
+
+
+Next, you need to load the module in your Apache configuration, with a line
+such as:
+
+	LoadModule authz_fsacl_module lib/httpd/mod_authz_fsacl.so
+
+
+Finally, you need to configure the directories in which you want to perform
+filesystem ACL based authorization. Note that mod_authz_fsacl does not
+perform any authentication; you will need to configure an appropriate
+authentication module/method to authenticate your user base. Any
+authentication module can be used as long as it populates the Apache
+authentication username field.
+
+For example:
+
+	<Directory "/foo">
+		AuthName "FS ACL authz"
+		AuthType Basic
+		AuthBasicProvider ldap
+		AuthLDAPURL ldaps://ldap.example.edu:636/DC=example,DC=edu?uid
+		Require fs-acl
+	</Directory>
+
+
+In this example, any file under the directory /foo that is world readable
+will be delivered to any client with no authentication required. An attempt
+to access any file whose ACL does not provide world readability will result
+in an authentication request. If the authenticated user is provided access
+by the ACL, the file will be delivered, otherwise a permission denied error
+will be returned.
+
+For Solaris ZFS, world readability is determined by the presence of the
+"read" permission on the "everyone@" ACE.
+
+Note that the web server itself will require read access to the file in
+order to evaluate its ACL and deliver the file. This can be achieved by an
+ACL entry providing access to the user or group under which the web server
+runs. Unfortunately, this does mean that if the web server itself is
+compromised access to all web delivered files would be possible, but I am
+unaware of a good technical implementation that would allow Apache to
+conditionally assume the identity of an authenticated user for accessing a
+ZFS filesystem (which, for example, mod_auth_dce did for DCE/DFS).
+
+
+Feedback/Availability
+---------------------
+
+Please report any bugs or feature requests to <henson@acm.org>.
+
+
+The latest version of mod_authz_fsacl is currently available at
+
+http://www.csupomona.edu/~henson/www/projects/mod_authz_fsacl/
