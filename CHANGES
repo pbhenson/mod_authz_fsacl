@@ -1,3 +1,10 @@
+0.16 - Fix problem where a request for a directory not including a trailing / did
+       not correctly look for index files. Now a / is always inserted between the
+       directory and the potential index file; while this will result in a double
+       / for requests which already include a trailing /, that seems less
+       inefficient than checking every request for a trailing / and conditionally
+       adding it.
+
 0.15 - Add support for directory indexes
 
 0.10 - First publicly released version

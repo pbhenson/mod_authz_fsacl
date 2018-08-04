@@ -3,7 +3,7 @@
  *
  * Paul B. Henson <henson@acm.org>
  *
- * Copyright (c) 2008 Paul B. Henson -- see COPYRIGHT file for details
+ * Copyright (c) 2008,2009 Paul B. Henson -- see COPYRIGHT file for details
  *
  */
 
@@ -87,7 +87,7 @@ static int authz_fsacl_check_user_id(request_rec *r) {
 				apr_finfo_t finfo;
 				apr_status_t result;
 
-				char *index_path = apr_pstrcat(r->pool, r->filename, *names_ptr, NULL);
+				char *index_path = apr_pstrcat(r->pool, r->filename, "/", *names_ptr, NULL);
 
 				if ((result = apr_stat(&finfo, index_path, APR_FINFO_PROT, r->pool)) != APR_SUCCESS) {
 					if (APR_STATUS_IS_EACCES(result)) {
