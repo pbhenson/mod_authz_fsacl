@@ -241,6 +241,7 @@ static int authz_fsacl_check_auth(request_rec *r) {
 		return OK;
 	}
 	else if (result == 0) {
+		ap_log_rerror(APLOG_MARK, APLOG_ERR, 0, r, "authz_fsacl_check_auth: permission denied user=%s uri=%s", r->user, r->uri);
 		return HTTP_FORBIDDEN;
 	}
 	else {

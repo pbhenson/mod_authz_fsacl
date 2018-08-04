@@ -1,3 +1,9 @@
+0.18 - The authenticated username is not logged in the access_log when the acl
+       does not permit access and permission denied is returned. Pending
+       potential future investigation of why that is and how it might be resolved,
+       a separate error message is logged including the username and the uri
+       of the resource which was denied.
+
 0.17 - Inheritable ACE's should be respected unless they are marked inherit only
 
 0.16 - Fix problem where a request for a directory not including a trailing / did
