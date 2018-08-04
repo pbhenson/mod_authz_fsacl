@@ -1,3 +1,5 @@
+0.17 - Inheritable ACE's should be respected unless they are marked inherit only
+
 0.16 - Fix problem where a request for a directory not including a trailing / did
        not correctly look for index files. Now a / is always inserted between the
        directory and the potential index file; while this will result in a double

@@ -191,7 +191,7 @@ static int authz_fsacl_check_auth(request_rec *r) {
 
 		ace_t *ace = (ace_t *)(ace_list+acl_index*sizeof(ace_t));
 
-		if (ace->a_flags & (ACE_FILE_INHERIT_ACE|ACE_DIRECTORY_INHERIT_ACE))
+		if (ace->a_flags & ACE_INHERIT_ONLY_ACE)
 			continue;
 
 		if (ace->a_access_mask & ACE_READ_DATA) {
