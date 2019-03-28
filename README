@@ -11,8 +11,9 @@ delivered without authentication requested, while any file that restricts
 access will only be provided to an authenticated user that is authorized by
 the ACL.
 
-Currently mod_authz_fsacl only supports ZFS ACLs under Solaris, but could
-easily be extended to other types of ACLs or other operating systems.
+Currently mod_authz_fsacl only supports ZFS ACLs under illumos based
+operating systems (including Solaris), but could easily be extended to
+other types of ACLs or other operating systems.
 
 
 Installation/Configuration
@@ -61,8 +62,15 @@ in an authentication request. If the authenticated user is provided access
 by the ACL, the file will be delivered, otherwise a permission denied error
 will be returned.
 
-For Solaris ZFS, world readability is determined by the presence of the
-"read" permission on the "everyone@" ACE.
+For illumos ZFS, world readability is determined by the presence of the
+"read" permission on the "everyone@" ACE. Please note that deny ACL entries
+are not currently evaluated; use of this module on files which contain
+deny entries may result in improper access control. Further, one the
+permissions on the specific file/directory are evaluated, not the
+permissions on the directory tree leading up to it; in other words the
+module does not enforce chokepoints or in Windows terms bypass traverse
+checking is enabled. Both of these deficiencies will possibly be addressed
+in a future version.
 
 Note that the web server itself will require read access to the file in
 order to evaluate its ACL and deliver the file. This can be achieved by an

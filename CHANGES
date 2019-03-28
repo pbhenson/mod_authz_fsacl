@@ -1,3 +1,8 @@
+0.24 - Port to Apache httpd 2.4 authorization API. This version no longer
+       supports earlier versions.
+
+     - Document deficiency regarding ACL deny entries
+
 0.18 - The authenticated username is not logged in the access_log when the acl
        does not permit access and permission denied is returned. Pending
        potential future investigation of why that is and how it might be resolved,
